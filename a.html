@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stream Page</title>
+    <style>
+        /* Navbar styling */
+        *{
+            margin: 0%;
+        }
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        /* Join button styling */
+        #join-btn {
+            padding: 8px 16px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #join-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Video stream box */
+        #stream-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            margin-top: 60px;
+            background-color: black;
+        }
+
+        #video-streams {
+            width: 70%;
+            height: 70%;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        #video-streams{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    height: 90vh;
+    width: 1400px;
+    margin:0 auto;
+}
+        /* Stream controls styling */
+        #stream-controls {
+            display: none;
+            margin-top: 20px;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        #stream-controls button {
+            padding: 8px 16px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+        }
+
+        #stream-controls button:hover {
+            background-color: #0056b3;
+        }
+
+        /* TTS container styling */
+        #tts-container {
+            display: none;
+            background-color: #333;
+            padding: 10px;
+            color: white;
+            margin-top: 20px;
+        }
+
+        #result {
+            width: 100%;
+            padding: 10px;
+            background-color: #222;
+            color: white;
+            border: none;
+            resize: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <span>Stream Page</span>
+        <button id="join-btn">Join Stream</button>
+    </nav>
+
+    <!-- Stream Wrapper -->
+    <div id="stream-wrapper">
+        <div id="video-streams"></div>
+        <!-- <div id="video-streams">
+            <p>Camera Feed</p>
+        </div> -->
+    </div>
+
+    <!-- Stream Controls -->
+    <div id="stream-controls">
+        <button id="leave-btn">Leave Stream</button>
+        <button id="mic-btn">Mic On</button>
+        <button id="camera-btn">Camera On</button>
+        <button id="click_to_convert">Speech to Text</button>
+        <button id="toggle-tts">Show Voice Recognition</button>
+    </div>
+
+    <!-- TTS Container -->
+    <div id="tts-container">
+        <textarea id="result" rows="8" cols="80"></textarea><br>
+        <button id="start">Start</button>
+        <button id="stop">Stop</button>
+    </div>
+
+          <script type="text/javascript">
+       // Get elements
+       const toggleButton = document.getElementById('toggle-tts');
+       const ttsContainer = document.getElementById('tts-container');
+       const startButton = document.getElementById('start');
+       const stopButton = document.getElementById('stop');
+       const resultElement = document.getElementById('result');
+   
+       // Initialize Speech Recognition
+       const recognition = new webkitSpeechRecognition();
+       recognition.lang = window.navigator.language;
+       recognition.interimResults = true;
+   
+       // Toggle visibility of TTS container
+       toggleButton.addEventListener('click', () => {
+           ttsContainer.style.display = ttsContainer.style.display === 'none' ? 'block' : 'none';
+       });
+   
+       // Start and Stop recognition
+       startButton.addEventListener('click', () => {
+           recognition.start();
+       });
+   
+       stopButton.addEventListener('click', () => {
+           recognition.stop();
+       });
+   
+       // Display recognition result
+       recognition.addEventListener('result', (event) => {
+           const result = event.results[event.results.length - 1][0].transcript;
+           resultElement.textContent = result;
+       });
+   </script>
+    
+<script src="AgoraRTC_N-4.7.3.js"></script>
+<script src='main.js'></script>
+</body>
+</html>

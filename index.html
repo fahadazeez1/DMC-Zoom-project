@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>DMCONNECTS</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+        <script src="https://kit.fontawesome.com/fdc47ca2be.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <button id="join-btn">Join Stream</button>
+
+    <div id="stream-wrapper">
+        <div id="video-streams"></div>
+
+        <div id="stream-controls">
+   <button id="toggle-tts">Show Voice Recognition</button>
+
+            <button id="leave-btn">Leave Stream</button>
+            <button id="mic-btn">Mic On</button>
+            <button id="camera-btn">Camera on</button>
+            <button id="click_to_convert">Text to speech </button>
+            <div id="tts-container2" style="display: none;">
+                <textarea placeholder="Write something...." id="textInput"></textarea>
+               
+            <div class="footer">
+
+                <select name="" id="voiceSelect">
+
+            <!-- <i class="fa-thin fa-caret-down"></i> -->
+
+                   
+
+                </select>
+
+            <button id="speakButton"><i class="fa-solid fa-play"></i> Listen
+
+            </button>
+
+            </div>
+
+                </button>
+            </div>
+
+        </div>
+    </div>
+   <!-- tts -->
+
+
+   <div id="tts-container" class="ttscont" style="display: none;">
+       <textarea id="result" rows="8" cols="80"></textarea><br>
+       <button id="start" class="ss">Start</button>
+       <button id="stop" class="">Stop</button>
+   </div>
+
+
+   <!-- tts -->
+   
+   <script type="text/javascript">
+       // Get elements
+       const toggleButton = document.getElementById('toggle-tts');
+       const toggleButton2 = document.getElementById('click_to_convert');
+       const ttsContainer = document.getElementById('tts-container');
+       const ttsContainer2 = document.getElementById('tts-container2');
+       const startButton = document.getElementById('start');
+       const stopButton = document.getElementById('stop');
+       const resultElement = document.getElementById('result');
+   
+       // Initialize Speech Recognition
+       const recognition = new webkitSpeechRecognition();
+       recognition.lang = window.navigator.language;
+       recognition.interimResults = true;
+   
+       // Toggle visibility of TTS container
+       toggleButton.addEventListener('click', () => {
+           ttsContainer.style.display = ttsContainer.style.display === 'none' ? 'block' : 'none';
+       });
+   
+
+       toggleButton2.addEventListener('click', () => {
+           ttsContainer2.style.display = ttsContainer2.style.display === 'none' ? 'block' : 'none';
+       });
+   
+       // Start and Stop recognition
+       startButton.addEventListener('click', () => {
+           recognition.start();
+       });
+   
+       stopButton.addEventListener('click', () => {
+           recognition.stop();
+       });
+   
+       // Display recognition result
+       recognition.addEventListener('result', (event) => {
+           const result = event.results[event.results.length - 1][0].transcript;
+           resultElement.textContent = result;
+       });
+
+
+
+
+
+
+
+       const speakButton = document.getElementById('speakButton');
+
+const textInput = document.getElementById('textInput');
+
+const msg = new SpeechSynthesisUtterance();
+
+ 
+
+msg.rate = 0.85; // Speed of speech
+
+msg.pitch = 1;
+
+ 
+
+// Store retrieved voices
+
+let voices = [];
+
+ 
+
+// Get reference to the select element
+
+const voiceSelect = document.getElementById('voiceSelect');
+
+ 
+
+// Function to populate the select element with available voices
+
+function populateVoiceList() {
+
+    // Retrieve list of available voices
+
+    voices = speechSynthesis.getVoices();
+
+ 
+
+    // Clear existing options
+
+    voiceSelect.innerHTML = '';
+
+ 
+
+    // Loop through each voice and create an option element for it
+
+    voices.forEach((voice, index) => {
+
+        const option = document.createElement('option');
+
+        option.textContent = voice.name;
+
+        option.setAttribute('value', index);
+
+        voiceSelect.appendChild(option);
+
+    });
+
+}
+
+ 
+
+// Populate voice list when the voices are loaded initially
+
+populateVoiceList();
+
+ 
+
+// Listen for voiceschanged event to repopulate the list if voices change
+
+if ('speechSynthesis' in window) {
+
+    speechSynthesis.onvoiceschanged = populateVoiceList;
+
+}
+
+ 
+
+// Event listener for voice selection change
+
+voiceSelect.addEventListener('change', () => {
+
+    // Set the selected voice
+
+    msg.voice = voices[voiceSelect.value];
+
+});
+
+
+
+ 
+
+// Event listener for speak button click
+
+speakButton.addEventListener('click', () => {
+
+    msg.text = textInput.value;
+
+    speechSynthesis.speak(msg);
+
+});
+
+
+
+
+
+
+
+   </script>
+   
+    
+</body>
+<!-- <script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script> -->
+<script src="AgoraRTC_N-4.7.3.js"></script>
+<script src='main.js'></script>
+</html>
